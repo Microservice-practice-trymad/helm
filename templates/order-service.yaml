@@ -1,0 +1,42 @@
+{{- $currentService := dict "Service" .Values.service.orderService "kind" "deploy" "Root" . }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "app.name" $currentService }}
+  labels:
+    {{- include "app.labels" $currentService | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "app.labels" $currentService | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "app.labels" $currentService | nindent 8 }}
+    spec:
+      {{ if .Values.runInOrder -}}
+      initContainers: 
+        {{- include "app.waitConfigService" $currentService | nindent 8 }}
+      {{- end }}
+      containers:
+        {{- include "app.containers" $currentService | nindent 8 }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.db.secret.name }}
+            - configMapRef:
+                name: {{ .Values.service.infrastructure.configName }}
+          env:
+            - name: DB_URL
+              value: "{{ .Values.db.url.jdbc }}/{{ .Values.service.orderService.name }}"
+---
+{{- with merge . .Values.service.orderService (dict "kind" "deploy") }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service.orderService.name }}
+  labels:
+    {{- include "app.labels" $currentService | nindent 4 }}
+spec:
+  {{- include "app.service " $currentService | nindent 2 }}
+{{- end }}

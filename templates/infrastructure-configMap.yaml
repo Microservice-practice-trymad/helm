@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.service.infrastructure.configName }}
+data:
+  DISCOVERY_SERVER_URL: http://{{ .Values.service.discoveryService.name }}:{{ .Values.service.discoveryService.servicePort }}/eureka
+  CONFIG_SERVICE_URL: http://{{.Values.service.configService.name }}:{{ .Values.service.configService.servicePort }}

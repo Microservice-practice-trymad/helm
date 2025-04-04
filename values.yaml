@@ -1,0 +1,45 @@
+db:
+  url:
+    jdbc: jdbc:postgresql://138.124.19.52:5432
+  secret:
+    name: db-secret
+service:
+  infrastructure:
+    configName: infrastructure-config
+  userService:
+    name: user-service
+    targetPort: 8080
+    servicePort: 8080
+    image: trymad/study-user-service:0.0.2
+  productService:
+    name: product-service
+    targetPort: 8080
+    servicePort: 8080
+    image: trymad/study-product-service:0.0.2
+  orderService:
+    name: order-service
+    targetPort: 8080
+    servicePort: 8080
+    image: trymad/study-order-service:0.0.2
+  discoveryService:
+    name: discovery-service
+    targetPort: 8761
+    servicePort: 8761
+    image: trymad/study-discovery-service:0.0.2
+  configService:
+    name: config-service
+    targetPort: 8888
+    servicePort: 8888
+    image: trymad/study-config-service:0.0.2
+ingress: 
+  host: trymad-test.duckdns.org
+initContainer:
+  image: busybox
+  configService:
+    name: wait-for-config-service
+runInOrder: true
+chartInfo: ""
+
+ 
+
+
