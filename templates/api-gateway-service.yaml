@@ -1,4 +1,4 @@
-{{- $currentService := dict "Service" .Values.service.productService "Root" . }}
+{{- $currentService := dict "Service" .Values.service.apiService "Root" . }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -22,13 +22,8 @@ spec:
       containers:
         {{- include "app.containers" $currentService | nindent 8 }}
           envFrom:
-            - secretRef:
-                name: {{ .Values.db.secret.name }}
             - configMapRef:
                 name: {{ .Values.service.infrastructure.configName }}
-          env:
-            - name: DB_URL
-              value: "{{ .Values.db.url.jdbc }}/{{ .Values.service.productService.name }}"
 ---
 apiVersion: v1
 kind: Service

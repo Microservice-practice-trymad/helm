@@ -7,7 +7,7 @@ chartVersion: {{ .Root.Chart.Version }}
 {{- end }}
 
 {{- define "app.name" -}}
- {{ .kind -}} - {{- .Service.name }}
+{{ .Service.name }}
 {{- end }}g
 
 {{- define "app.containers" -}}

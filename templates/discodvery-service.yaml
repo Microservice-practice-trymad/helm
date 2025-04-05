@@ -1,9 +1,9 @@
-{{- $currentService := dict "Service" .Values.service.discoveryService "kind" "deploy" "Root" . }}
+{{- $currentService := dict "Service" .Values.service.discoveryService "Root" . }}
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "app.name" $currentService }}
+  name: deploy-{{ include "app.name" $currentService }}
   labels:
     {{- include "app.labels" $currentService | nindent 4 }}
 spec:
@@ -25,7 +25,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.service.discoveryService.name }}
+  name: {{ include "app.name" $currentService }}
   labels:
     {{- include "app.labels" $currentService | nindent 4 }}
 spec:

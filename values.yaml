@@ -31,14 +31,18 @@ service:
     targetPort: 8888
     servicePort: 8888
     image: trymad/study-config-service:0.0.2
-ingress: 
-  host: trymad-test.duckdns.org
+  apiService:
+    name: api-gateway-service
+    targetPort: 8080
+    servicePort: 8080
+    image: trymad/study-api-gateway:0.0.1
 initContainer:
   image: busybox
   configService:
     name: wait-for-config-service
 runInOrder: true
 chartInfo: ""
+domain: 203.31.40.27.nip.io
 
  
 
