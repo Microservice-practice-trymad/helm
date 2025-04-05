@@ -35,7 +35,7 @@ service:
     name: api-gateway-service
     targetPort: 8080
     servicePort: 8080
-    image: trymad/study-api-gateway:0.0.1
+    image: trymad/study-api-gateway:0.0.2
 initContainer:
   image: busybox
   configService:

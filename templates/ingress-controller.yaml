@@ -2,8 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nginx-ingress
-  annotations:
-    traefik.ingress.kubernetes.io/router.middlewares: default-strip-prefix@kubernetescrd
 spec:
   rules:
     - host: eureka.{{ .Values.domain }}
