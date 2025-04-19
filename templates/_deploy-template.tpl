@@ -8,7 +8,13 @@ chartVersion: {{ .Root.Chart.Version }}
 
 {{- define "app.name" -}}
 {{ .Service.name }}
-{{- end }}g
+{{- end }}
+
+{{- define "app.template" -}}
+- name: appconfig
+  configMap: 
+    name: {{ .Service.name }}-config
+{{- end }}
 
 {{- define "app.containers" -}}
 - name: pod- {{- .Service.name }}
@@ -20,18 +26,23 @@ chartVersion: {{ .Root.Chart.Version }}
       memory: "700Mi"
   ports:
   - containerPort: {{ .Service.targetPort }}
-  readinessProbe:
-    httpGet:
-      path: /actuator/health/readiness
-      port: {{ .Service.targetPort }}
-    initialDelaySeconds: 10
-    periodSeconds: 20
-  livenessProbe:
-    httpGet:
-      path: /actuator/health/liveness
-      port: {{ .Service.targetPort }}
-    initialDelaySeconds: 30
-    periodSeconds: 60
+  volumeMounts:
+  - mountPath: /etc/opt/configs
+    name: appconfig
+  args:
+    - --spring.config.import=/etc/opt/configs/application-k8s.yaml
+  # readinessProbe:
+  #   httpGet:
+  #     path: /actuator/health/readiness
+  #     port: {{ .Service.targetPort }}
+  #   initialDelaySeconds: 10
+  #   periodSeconds: 20
+  # livenessProbe:
+  #   httpGet:
+  #     path: /actuator/health/liveness
+  #     port: {{ .Service.targetPort }}
+  #   initialDelaySeconds: 30
+  #   periodSeconds: 60
 {{- end }}
 
 {{- define "app.service " -}}
@@ -42,13 +53,4 @@ ports:
     port: {{ .Service.servicePort }}
     targetPort: {{ .Service.targetPort }}
 type: ClusterIP
-{{- end }}
-
-{{- define "app.waitConfigService" -}}
-- name: {{ .Root.Values.initContainer.configService.name }}
-  image: {{ .Root.Values.initContainer.image }}
-  command:
-    - 'sh'
-    - '-c'
-    - "until wget -qO- http://{{ .Root.Values.service.configService.name }}:{{ .Root.Values.service.configService.targetPort }}/actuator/health/readiness | grep 'UP'; do echo waiting for configService; sleep 5; done"
 {{- end }}

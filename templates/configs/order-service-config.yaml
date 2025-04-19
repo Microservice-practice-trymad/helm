@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.service.orderService.name }}-config
+data:
+  application-k8s.yaml: |-
+{{ .Files.Get "configs/order-service.yaml" | indent 4 }}
+

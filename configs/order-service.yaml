@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  cloud: 
+    kubernetes:
+      discovery:
+        enabled: true
+    
+service:
+  userService:
+    name: user-service
+    apiPath: api/v1/users
+    protocol: http
+    port: 8080
+
+  productService:
+    name: product-service
+    apiPath: api/v1/products
+    protocol: http
+    port: 8080

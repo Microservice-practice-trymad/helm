@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.service.productService.name }}-config
+data:
+  application-k8s.yaml: |-
+{{ .Files.Get "configs/product-service.yaml" | indent 4 }}

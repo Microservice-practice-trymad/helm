@@ -16,11 +16,18 @@ spec:
       labels:
         {{- include "app.labels" $currentService | nindent 8 }}
     spec:
+      {{ if .Values.runInOrder -}}
+      initContainers: 
+        {{- include "app.waitConfigService" $currentService | nindent 8 }}
+      {{- end }}
       containers:
         {{- include "app.containers" $currentService | nindent 8 }}
           env:
             - name: HOSTNAME
               value: {{ .Values.service.discoveryService.name }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.service.infrastructure.configName }}
 ---
 apiVersion: v1
 kind: Service

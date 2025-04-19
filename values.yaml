@@ -10,38 +10,17 @@ service:
     name: user-service
     targetPort: 8080
     servicePort: 8080
-    image: trymad/study-user-service:0.0.2
+    image: trymad/study-user-service:0.0.21
   productService:
     name: product-service
     targetPort: 8080
     servicePort: 8080
-    image: trymad/study-product-service:0.0.2
+    image: trymad/study-product-service:0.0.21
   orderService:
     name: order-service
     targetPort: 8080
     servicePort: 8080
-    image: trymad/study-order-service:0.0.2
-  discoveryService:
-    name: discovery-service
-    targetPort: 8761
-    servicePort: 8761
-    image: trymad/study-discovery-service:0.0.2
-  configService:
-    name: config-service
-    targetPort: 8888
-    servicePort: 8888
-    image: trymad/study-config-service:0.0.2
-  apiService:
-    name: api-gateway-service
-    targetPort: 8080
-    servicePort: 8080
-    image: trymad/study-api-gateway:0.0.2
-initContainer:
-  image: busybox
-  configService:
-    name: wait-for-config-service
-runInOrder: true
-chartInfo: ""
+    image: trymad/study-order-service:0.0.21
 domain: 203.31.40.27.nip.io
 
  

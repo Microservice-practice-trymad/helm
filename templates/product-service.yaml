@@ -15,20 +15,18 @@ spec:
       labels:
         {{- include "app.labels" $currentService | nindent 8 }}
     spec:
-      {{ if .Values.runInOrder -}}
-      initContainers: 
-        {{- include "app.waitConfigService" $currentService | nindent 8 }}
-      {{- end }}
+      volumes:
+        {{- include "app.template" $currentService | nindent 8 }}
       containers:
         {{- include "app.containers" $currentService | nindent 8 }}
           envFrom:
             - secretRef:
                 name: {{ .Values.db.secret.name }}
-            - configMapRef:
-                name: {{ .Values.service.infrastructure.configName }}
           env:
             - name: DB_URL
               value: "{{ .Values.db.url.jdbc }}/{{ .Values.service.productService.name }}"
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s
 ---
 apiVersion: v1
 kind: Service

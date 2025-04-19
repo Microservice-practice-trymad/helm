@@ -2,28 +2,50 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nginx-ingress
+  annotations:
+    traefik.ingress.kubernetes.io/set-forwarded-header: "true"
 spec:
   rules:
-    - host: eureka.{{ .Values.domain }}
+    - host: user-service.{{ .Values.domain }}
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: {{ .Values.service.discoveryService.name }}
+                name: {{ .Values.service.userService.name }}
                 port:
-                  number: {{ .Values.service.discoveryService.servicePort }}
-    - host: gateway.{{ .Values.domain }}
+                  number: {{ .Values.service.userService.servicePort }}
+    - host: order-service.{{ .Values.domain }}
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: {{ .Values.service.apiService.name }}
+                name: {{ .Values.service.orderService.name }}
                 port:
-                  number: {{ .Values.service.apiService.servicePort }}
+                  number: {{ .Values.service.orderService.servicePort }}
+    - host: product-service.{{ .Values.domain }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.service.productService.name }}
+                port:
+                  number: {{ .Values.service.productService.servicePort }}
+    - host: keycloak.{{ .Values.domain }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: keycloak
+                port:
+                  number: 8080
 
 
 
